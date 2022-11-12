@@ -10,7 +10,6 @@ namespace BeetleX.MQTT
         [ThreadStatic]
         private static Byte[] mDataBuffer;
 
-
         public void Write(System.IO.Stream stream, int value)
         {
 
@@ -31,24 +30,23 @@ namespace BeetleX.MQTT
 
         private byte mBits = 0;
 
-        public int Read(System.IO.Stream stream)
+        public int? Read(System.IO.Stream stream)
         {
 
             Byte b;
             while (true)
             {
                 if (stream.Length < 1)
-                    return -1;
+                    return null;
                 var bt = stream.ReadByte();
                 if (bt < 0)
                 {
                     mBits = 0;
                     mResult = 0;
-                    throw new OverflowException("byte value cannot be less than zero!");
+                    throw new BXException("read 7bit int error:byte value cannot be less than zero!");
                 }
                 b = (Byte)bt;
 
-                // 必须转为Int32，否则可能溢出
                 mResult |= (UInt32)((b & 0x7f) << mBits);
                 if ((b & 0x80) == 0) break;
                 mBits += 7;
@@ -56,12 +54,13 @@ namespace BeetleX.MQTT
                 {
                     mBits = 0;
                     mResult = 0;
-                    throw new OverflowException("out of maximum value!");
+                    throw new BXException("read 7bit int error:out of maximum value!");
                 }
             }
             mBits = 0;
+            var result = mResult;
             mResult = 0;
-            return (Int32)mResult;
+            return (Int32)result;
         }
     }
 }

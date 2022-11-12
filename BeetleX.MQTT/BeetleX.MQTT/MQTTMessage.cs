@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace BeetleX.MQTT
@@ -12,7 +13,7 @@ namespace BeetleX.MQTT
 
         }
 
-        public abstract MessageType Type { get; }
+        public abstract MQTTMessageType Type { get; }
 
         public bool DUP { get; set; }
 
@@ -20,12 +21,23 @@ namespace BeetleX.MQTT
 
         public bool Retain { get; set; }
 
-        public virtual void Read(System.IO.Stream stream, ISession session)
+
+        internal void Read(System.IO.Stream stream, ISession session)
         {
-            int a = 0b1111_0000;
+            OnRead(stream, session);
         }
 
-        public virtual void Write(System.IO.Stream stream, ISession session)
+        protected virtual void OnRead(Stream stream, ISession session)
+        {
+
+        }
+
+        internal void Write(System.IO.Stream stream, ISession session)
+        {
+            OnWrite(stream, session);
+        }
+
+        protected virtual void OnWrite(Stream stream, ISession sessioni)
         {
 
         }
