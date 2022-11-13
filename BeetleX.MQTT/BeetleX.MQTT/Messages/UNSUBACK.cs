@@ -4,7 +4,8 @@ using System.Text;
 
 namespace BeetleX.MQTT.Messages
 {
-    class UNSUBACK
+    public class UNSUBACK:MQTTMessage
     {
+        public override MQTTMessageType Type => MQTTMessageType.UNSUBACK;
     }
 }

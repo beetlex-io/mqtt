@@ -4,7 +4,8 @@ using System.Text;
 
 namespace BeetleX.MQTT.Messages
 {
-    class SUBSCRIBE
+    public class SUBSCRIBE:MQTTMessage
     {
+        public override MQTTMessageType Type => MQTTMessageType.SUBSCRIBE;
     }
 }

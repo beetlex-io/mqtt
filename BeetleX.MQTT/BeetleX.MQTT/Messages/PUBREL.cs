@@ -4,7 +4,8 @@ using System.Text;
 
 namespace BeetleX.MQTT.Messages
 {
-    class PUBREL
+    public class PUBREL:MQTTMessage
     {
+        public override MQTTMessageType Type => MQTTMessageType.PUBREL;
     }
 }

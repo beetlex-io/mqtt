@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BeetleX.MQTT
 {
-    public enum MessageType : int
+    public enum MQTTMessageType : int
     {
         Reserved0 = 0,
         CONNECT = 1,

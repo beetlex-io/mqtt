@@ -43,7 +43,7 @@ namespace BeetleX.MQTT
                 {
                     mBits = 0;
                     mResult = 0;
-                    throw new BXException("read 7bit int error:byte value cannot be less than zero!");
+                    throw new BXException("Read 7bit int error:byte value cannot be less than zero!");
                 }
                 b = (Byte)bt;
 
@@ -54,7 +54,7 @@ namespace BeetleX.MQTT
                 {
                     mBits = 0;
                     mResult = 0;
-                    throw new BXException("read 7bit int error:out of maximum value!");
+                    throw new BXException("Read 7bit int error:out of maximum value!");
                 }
             }
             mBits = 0;
