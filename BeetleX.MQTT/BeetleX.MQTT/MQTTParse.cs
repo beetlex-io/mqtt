@@ -25,7 +25,43 @@ namespace BeetleX.MQTT
 
         private MQTTMessage CreateMessage(MQTTMessageType type)
         {
-            return null;
+            switch (type)
+            {
+                case MQTTMessageType.CONNACK:
+                    return new Messages.CONNACK();
+                case MQTTMessageType.CONNECT:
+                    return new Messages.CONNECT();
+                case MQTTMessageType.DISCONNECT:
+                    return new Messages.DISCONNECT();
+                case MQTTMessageType.PINGREQ:
+                    return new Messages.PINGREQ();
+                case MQTTMessageType.PINGRESP:
+                    return new Messages.PINGRESP();
+                case MQTTMessageType.PUBACK:
+                    return new Messages.PUBACK();
+                case MQTTMessageType.PUBCOMP:
+                    return new Messages.PUBCOMP();
+                case MQTTMessageType.PUBLISH:
+                    return new Messages.PUBLISH();
+                case MQTTMessageType.PUBREC:
+                    return new Messages.PUBREC();
+                case MQTTMessageType.PUBREL:
+                    return new Messages.PUBREL();
+                case MQTTMessageType.Reserved0:
+                    return new Messages.RESERVED0();
+                case MQTTMessageType.Reserved15:
+                    return new Messages.RESERVED15();
+                case MQTTMessageType.SUBACK:
+                    return new Messages.SUBACK();
+                case MQTTMessageType.SUBSCRIBE:
+                    return new Messages.SUBSCRIBE();
+                case MQTTMessageType.UNSUBACK:
+                    return new Messages.UNSUBACK();
+                case MQTTMessageType.UNSUBSCRIBE:
+                    return new Messages.UNSUBSCRIBE();
+                default:
+                    throw new BXException($"{type} message type notfound!");
+            }
         }
 
         [ThreadStatic]
