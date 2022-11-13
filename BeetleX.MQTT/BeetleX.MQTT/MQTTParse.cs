@@ -135,12 +135,12 @@ namespace BeetleX.MQTT
             var protocolStream = GetProtocolStream();
             int header = 0;
             header |= ((int)msg.Type << 4);
-            if (mDUP)
+            if (msg.DUP)
             {
                 header |= (1 << 3);
             }
             header |= ((int)msg.QoS << 1);
-            if (mRetain)
+            if (msg.Retain)
             {
                 header |= 1;
             }

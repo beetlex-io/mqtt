@@ -33,6 +33,26 @@ namespace BeetleX.MQTT
             return mIntBuffer;
         }
 
+        public static Func<int, byte[]> RentPayloadBufferHandler { get; set; }
+
+        public byte[] RentPayloadBuffer(int count)
+        {
+            if (RentPayloadBufferHandler != null)
+            {
+                return RentPayloadBufferHandler(count);
+            }
+
+            return new byte[count];
+        }
+
+        public static Action<byte[]> ReturnPayloadBufferHandler { get; set; }
+        public void ReturnPayloadBuffer(byte[] data)
+        {
+            ReturnPayloadBufferHandler?.Invoke(data);
+        }
+
+        public ArraySegment<byte> PayloadData { get; set; }
+
         protected virtual void WriteString(System.IO.Stream stream, string value, Encoding encoding = null)
         {
             if (encoding == null)
@@ -49,6 +69,7 @@ namespace BeetleX.MQTT
             System.Buffers.ArrayPool<byte>.Shared.Return(buffer);
 
         }
+
         protected virtual string ReadString(System.IO.Stream stream, Encoding encoding = null)
         {
             if (encoding == null)
