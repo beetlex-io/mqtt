@@ -1,2 +1,5 @@
 BeetleX.MQTT/.vs/
 BeetleX.MQTT/BeetleX.MQTT/obj/
+BeetleX.MQTT/BeetleX.MQTT.Server/bin/
+BeetleX.MQTT/BeetleX.MQTT.Server/obj/
+BeetleX.MQTT/BeetleX.MQTT/bin/

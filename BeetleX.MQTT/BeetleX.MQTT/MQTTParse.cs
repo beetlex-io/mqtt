@@ -80,6 +80,7 @@ namespace BeetleX.MQTT
                 target.Write(mCopyBuffer, 0, count);
                 length -= count;
             }
+            target.Position = 0;
         }
 
         private System.IO.MemoryStream GetProtocolStream()
@@ -94,6 +95,7 @@ namespace BeetleX.MQTT
 
         public MQTTMessage Read(BeetleX.Buffers.PipeStream stream, ISession session)
         {
+            IServer server = session.Server;
             if (stream.Length > 0)
             {
                 if (mType == null)
@@ -101,18 +103,23 @@ namespace BeetleX.MQTT
                     var value = stream.ReadByte();
                     if (value < 0)
                     {
-                        throw new BXException("Parse mqtt message error:fixed header byte value cannot be less than zero!");
+                        throw new BXException("parse mqtt message error:fixed header byte value cannot be less than zero!");
                     }
                     mType = (MQTTMessageType)((value & 0b1111_0000) >> 4);
                     mDUP = ((value & 0b0000_1000) >> 3) > 0;
                     mQoS = (QoSType)((value & 0b0000_0110) >> 1);
                     mRetain = ((value & 0b0000_0001) >> 0) > 0;
+                    if (server.EnableLog(EventArgs.LogType.Debug))
+                        server.Log(EventArgs.LogType.Debug, session, "parse mqtt header souccess");
+
                 }
                 if (mLength == null)
                 {
                     mLength = mInt7BitHandler.Read(stream);
+                    if (server.EnableLog(EventArgs.LogType.Debug))
+                        server.Log(EventArgs.LogType.Debug, session, $"parse mqtt size {mLength}");
                 }
-                if (mLength != null && stream.Length > mLength.Value)
+                if (mLength != null && stream.Length >= mLength.Value)
                 {
                     Stream protocolStream = GetProtocolStream();
                     CopyStream(stream, protocolStream, mLength.Value);
@@ -121,6 +128,8 @@ namespace BeetleX.MQTT
                     msg.QoS = mQoS;
                     msg.Retain = mRetain;
                     msg.Read(mProtocolStream, session);
+                    if (server.EnableLog(EventArgs.LogType.Debug))
+                        server.Log(EventArgs.LogType.Debug, session, $"parse mqtt type {msg} success");
                     mLength = null;
                     mType = null;
                     return msg;
@@ -132,6 +141,9 @@ namespace BeetleX.MQTT
 
         public void Write(MQTTMessage msg, BeetleX.Buffers.PipeStream stream, ISession session)
         {
+            IServer server = session.Server;
+            if (server.EnableLog(EventArgs.LogType.Debug))
+                server.Log(EventArgs.LogType.Debug, session, $"write mqtt message {msg}");
             var protocolStream = GetProtocolStream();
             int header = 0;
             header |= ((int)msg.Type << 4);
@@ -146,9 +158,13 @@ namespace BeetleX.MQTT
             }
             stream.WriteByte((byte)header);
             msg.Write(protocolStream, session);
+            if (server.EnableLog(EventArgs.LogType.Debug))
+                server.Log(EventArgs.LogType.Debug, session, $"write mqtt message body size {protocolStream.Length}");
             mInt7BitHandler.Write(stream, (int)protocolStream.Length);
             protocolStream.Position = 0;
             protocolStream.CopyTo(stream);
+            if (server.EnableLog(EventArgs.LogType.Debug))
+                server.Log(EventArgs.LogType.Debug, session, $"write mqtt message success");
         }
     }
 }
