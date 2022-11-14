@@ -25,6 +25,7 @@ namespace BeetleX.MQTT.Messages
             var buffer = RentPayloadBuffer((int)length);
             stream.Read(buffer, 0, length);
             PayLoadData = new ArraySegment<byte>(buffer, 0, length);
+            
         }
 
         protected override void OnWrite(Stream stream, ISession sessioni)

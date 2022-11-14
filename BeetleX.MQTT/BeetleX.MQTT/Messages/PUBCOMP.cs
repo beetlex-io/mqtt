@@ -22,4 +22,6 @@ namespace BeetleX.MQTT.Messages
             WriteUInt16(stream, Identifier);
         }
     }
+
+
 }
