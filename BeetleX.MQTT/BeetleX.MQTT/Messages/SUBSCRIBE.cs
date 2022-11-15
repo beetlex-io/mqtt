@@ -19,6 +19,7 @@ namespace BeetleX.MQTT.Messages
                 Subscription item = new Subscription();
                 item.TopicFilter = ReadString(stream);
                 item.QoSType = (QoSType)stream.ReadByte();
+                Subscriptions.Add(item);
             }
         }
 
@@ -33,7 +34,23 @@ namespace BeetleX.MQTT.Messages
             }
         }
 
+        public SUBSCRIBE AddTopicFilter(string name, QoSType type)
+        {
+            Subscriptions.Add(new Subscription { TopicFilter = name, QoSType = type });
+            return this;
+        }
+
         public List<Subscription> Subscriptions { get; set; } = new List<Subscription>();
+
+        public override string ToString()
+        {
+            string result = "";
+            foreach (var item in Subscriptions)
+            {
+                result += $"[Topic:{item.TopicFilter}|{item.QoSType}]";
+            }
+            return result;
+        }
     }
 
     public class Subscription

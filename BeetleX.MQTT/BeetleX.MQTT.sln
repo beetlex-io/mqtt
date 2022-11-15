@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31829.152
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT", "BeetleX.MQTT\BeetleX.MQTT.csproj", "{0B0E9FE3-8225-4DA5-87F3-C2114C2A2CE8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT.Server", "BeetleX.MQTT.Sever\BeetleX.MQTT.Server.csproj", "{2B4DDE1A-E8B3-48ED-8987-4EF50719D45E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT.Server", "BeetleX.MQTT.Server\BeetleX.MQTT.Server.csproj", "{B005E6AF-CFC1-4A6B-9D6A-91CB330A89D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{0B0E9FE3-8225-4DA5-87F3-C2114C2A2CE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B0E9FE3-8225-4DA5-87F3-C2114C2A2CE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B0E9FE3-8225-4DA5-87F3-C2114C2A2CE8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B4DDE1A-E8B3-48ED-8987-4EF50719D45E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B4DDE1A-E8B3-48ED-8987-4EF50719D45E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B4DDE1A-E8B3-48ED-8987-4EF50719D45E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B4DDE1A-E8B3-48ED-8987-4EF50719D45E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B005E6AF-CFC1-4A6B-9D6A-91CB330A89D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B005E6AF-CFC1-4A6B-9D6A-91CB330A89D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B005E6AF-CFC1-4A6B-9D6A-91CB330A89D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B005E6AF-CFC1-4A6B-9D6A-91CB330A89D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

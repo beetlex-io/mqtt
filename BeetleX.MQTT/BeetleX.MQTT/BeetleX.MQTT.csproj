@@ -12,14 +12,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BeetleX" Version="1.8.6.1114" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\..\..\..\..\beetlex120.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BeetleX" Version="1.8.8.1115" />
   </ItemGroup>
 
 </Project>

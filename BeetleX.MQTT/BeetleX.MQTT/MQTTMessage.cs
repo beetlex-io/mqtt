@@ -51,8 +51,6 @@ namespace BeetleX.MQTT
             ReturnPayloadBufferHandler?.Invoke(data);
         }
 
-        public ArraySegment<byte> PayloadData { get; set; }
-
         protected virtual void WriteString(System.IO.Stream stream, string value, Encoding encoding = null)
         {
             if (encoding == null)

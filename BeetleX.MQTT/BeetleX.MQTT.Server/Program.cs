@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BeetleX.MQTT.Messages;
+using System;
+using System.Text;
 
 namespace BeetleX.MQTT.Server
 {
@@ -15,24 +17,36 @@ namespace BeetleX.MQTT.Server
                 option.DefaultListen.Host = "127.0.0.1";
                 option.LogLevel = EventArgs.LogType.Trace;
             })
-            .OnMessageReceive<Messages.CONNECT>(e =>
+            .OnMessageReceive<CONNECT>(e =>
             {
-                Messages.CONNACK ack = new Messages.CONNACK();
+                e.GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, e.NetSession, $"{e.NetSession.RemoteEndPoint} connect name:{e.Message.UserName} password:{e.Message.Password}");
+                e.Session.UserName = e.Message.UserName;
+                e.Session.ID = e.Message.ClientID;
+                CONNACK ack = new CONNACK();
                 e.Return(ack);
             })
-            .OnMessageReceive<Messages.SUBSCRIBE>(e =>
+            .OnMessageReceive<SUBSCRIBE>(e =>
+            {
+                e.GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, e.NetSession, $"{e.Session.ID} subscribe {e.Message}");
+                SUBACK ack = new SUBACK();
+                ack.Identifier = e.Message.Identifier;
+                ack.Status = QoSType.MostOnce;
+                e.Return(ack);
+            })
+            .OnMessageReceive<PUBLISH>(e =>
             {
 
+                var data = Encoding.UTF8.GetString(e.Message.PayLoadData.Array, e.Message.PayLoadData.Offset, e.Message.PayLoadData.Count);
+                e.GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, e.NetSession, $"{e.Session.ID} publish {e.Message.Topic}@ {e.Message.Identifier} data:{data}");
+                PUBACK ack = new PUBACK();
+                ack.Identifier = e.Message.Identifier;
+                e.Return(ack);
+
             })
-            .OnMessageReceive<Messages.PINGREQ>(e =>
+            .OnMessageReceive<PINGREQ>(e =>
             {
-                Messages.PINGRESP resp = new Messages.PINGRESP();
+                PINGRESP resp = new PINGRESP();
                 e.Return(resp);
-            })
-            .OnMessageReceive<Messages.PUBLISH>(e =>
-            {
-
-
             })
             .OnMessageReceive(e =>
             {
@@ -44,12 +58,15 @@ namespace BeetleX.MQTT.Server
 
         public void Init(IServer server)
         {
-
+            server.GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, null, "application data init");
         }
     }
 
     public class MQTTUser : ISessionToken
     {
+        public string ID { get; set; }
+
+        public string UserName { get; set; }
         public void Dispose()
         {
 
@@ -57,7 +74,7 @@ namespace BeetleX.MQTT.Server
 
         public void Init(IServer server, ISession session)
         {
-
+            server.GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, session, "session data init");
         }
     }
 }
