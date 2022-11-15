@@ -93,7 +93,7 @@ namespace BeetleX.MQTT
             return mProtocolStream;
         }
 
-        public MQTTMessage Read(BeetleX.Buffers.PipeStream stream, ISession session)
+        public MQTTMessage Read(Stream stream, ISession session)
         {
             IServer server = session.Server;
             if (stream.Length > 0)
@@ -139,7 +139,7 @@ namespace BeetleX.MQTT
             return null;
         }
 
-        public void Write(MQTTMessage msg, BeetleX.Buffers.PipeStream stream, ISession session)
+        public void Write(MQTTMessage msg, Stream stream, ISession session)
         {
             IServer server = session.Server;
             if (server.EnableLog(EventArgs.LogType.Debug))

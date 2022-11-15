@@ -33,6 +33,12 @@ namespace BeetleX.MQTT.Server
                 ack.Status = QoSType.MostOnce;
                 e.Return(ack);
             })
+            .OnMessageReceive<UNSUBSCRIBE>(e =>
+            {
+                e.GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, e.NetSession, $"{e.Session.ID} unsubscribe {e.Message}");
+                UNSUBACK ack = new UNSUBACK();
+                e.Return(ack);
+            })
             .OnMessageReceive<PUBLISH>(e =>
             {
 

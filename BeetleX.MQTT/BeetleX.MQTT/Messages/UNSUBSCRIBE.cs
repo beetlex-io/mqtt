@@ -33,5 +33,15 @@ namespace BeetleX.MQTT.Messages
         }
 
         public List<string> Subscription { get; set; } = new List<string>();
+
+        public override string ToString()
+        {
+            string result = "";
+            foreach (var item in Subscription)
+            {
+                result += $"[{item}]";
+            }
+            return result;
+        }
     }
 }
