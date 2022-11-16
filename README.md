@@ -1,3 +1,4 @@
+``` csharp
 using BeetleX.MQTT.Messages;
 using System;
 using System.Text;
@@ -84,3 +85,4 @@ namespace BeetleX.MQTT.Server
         }
     }
 }
+```
