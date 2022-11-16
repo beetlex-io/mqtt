@@ -15,16 +15,42 @@ namespace BeetleX.MQTT.Messages
 
         public ArraySegment<byte> PayLoadData { get; set; }
 
-
-        public void SetPayLoad(string value)
+        public string ToString(Encoding encoding = null)
         {
-
-
+            if (this.PayLoadData == null)
+                return string.Empty;
+            if (encoding == null)
+                encoding = Encoding.UTF8;
+            return encoding.GetString(PayLoadData.Array, 0, PayLoadData.Count);
+        }
+        public override string ToString()
+        {
+            return ToString(null);
+        }
+        public T ToJsonObject<T>()
+        {
+            if (this.PayLoadData == null)
+                return default(T);
+            string str = ToString();
+            return System.Text.Json.JsonSerializer.Deserialize<T>(str);
         }
 
-        public void SetJsonPayLoad(object value)
+        public void SetString(string value, Encoding encoding = null)
         {
+            if (encoding == null)
+                encoding = Encoding.UTF8;
+            int size = value.Length * 6;
+            var buffer = RentPayloadBuffer(size);
+            var count = encoding.GetBytes(value, 0, value.Length, buffer, 0);
+            this.PayLoadData = new ArraySegment<byte>(buffer, 0, count);
+        }
 
+
+
+        public void SetJson(object value)
+        {
+            string str = System.Text.Json.JsonSerializer.Serialize(value);
+            SetString(str);
 
         }
 
