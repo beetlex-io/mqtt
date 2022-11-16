@@ -1,4 +1,4 @@
-## BeetleX MQTT Protocol
+## BeetleX mqtt protocol
 ``` csharp
 using BeetleX.MQTT.Messages;
 using System;
@@ -33,6 +33,12 @@ namespace BeetleX.MQTT.Server
                 SUBACK ack = new SUBACK();
                 ack.Identifier = e.Message.Identifier;
                 ack.Status = QoSType.MostOnce;
+                e.Return(ack);
+            })
+            .OnMessageReceive<UNSUBSCRIBE>(e =>
+            {
+                e.GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, e.NetSession, $"{e.Session.ID} unsubscribe {e.Message}");
+                UNSUBACK ack = new UNSUBACK();
                 e.Return(ack);
             })
             .OnMessageReceive<PUBLISH>(e =>
@@ -80,5 +86,4 @@ namespace BeetleX.MQTT.Server
         }
     }
 }
-
 ```
