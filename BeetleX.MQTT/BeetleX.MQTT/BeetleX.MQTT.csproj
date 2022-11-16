@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="BeetleX" Version="1.8.8.1115" />
+    <PackageReference Include="System.Text.Json" Version="7.0.0" />
   </ItemGroup>
 
 </Project>
