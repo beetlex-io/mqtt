@@ -63,6 +63,7 @@ namespace BeetleX.MQTT
 
             byte[] buffer = System.Buffers.ArrayPool<byte>.Shared.Rent(value.Length * 6);
             var count = encoding.GetBytes(value, 0, value.Length, buffer, 0);
+            WriteUInt16(stream, (ushort)count);
             stream.Write(buffer, 0, count);
             System.Buffers.ArrayPool<byte>.Shared.Return(buffer);
 

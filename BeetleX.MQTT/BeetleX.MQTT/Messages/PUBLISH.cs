@@ -15,6 +15,19 @@ namespace BeetleX.MQTT.Messages
 
         public ArraySegment<byte> PayLoadData { get; set; }
 
+
+        public void SetPayLoad(string value)
+        {
+
+
+        }
+
+        public void SetJsonPayLoad(object value)
+        {
+
+
+        }
+
         protected override void OnRead(Stream stream, ISession session)
         {
             base.OnRead(stream, session);
@@ -25,7 +38,7 @@ namespace BeetleX.MQTT.Messages
             var buffer = RentPayloadBuffer((int)length);
             stream.Read(buffer, 0, length);
             PayLoadData = new ArraySegment<byte>(buffer, 0, length);
-            
+
         }
 
         protected override void OnWrite(Stream stream, ISession sessioni)

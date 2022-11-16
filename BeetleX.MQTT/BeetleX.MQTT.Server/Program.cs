@@ -1,15 +1,16 @@
 ﻿using BeetleX.MQTT.Messages;
 using System;
+using System.Collections.Generic;
 using System.Text;
-
+using System.Linq;
 namespace BeetleX.MQTT.Server
 {
-    class Program : IApplication
+    class Program
     {
-        private static ServerBuilder<Program, MQTTUser, MQTTPacket> server;
+        private static ServerBuilder<MQTTApplication, MQTTUser, MQTTPacket> server;
         static void Main(string[] args)
         {
-            server = new ServerBuilder<Program, MQTTUser, MQTTPacket>();
+            server = new ServerBuilder<MQTTApplication, MQTTUser, MQTTPacket>();
             server.ConsoleOutputLog = true;
             server.SetOptions(option =>
             {
@@ -32,12 +33,14 @@ namespace BeetleX.MQTT.Server
                 ack.Identifier = e.Message.Identifier;
                 ack.Status = QoSType.MostOnce;
                 e.Return(ack);
+                e.Application.RegisterSubscribe(e.Message, e.Session);
             })
             .OnMessageReceive<UNSUBSCRIBE>(e =>
             {
                 e.GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, e.NetSession, $"{e.Session.ID} unsubscribe {e.Message}");
                 UNSUBACK ack = new UNSUBACK();
                 e.Return(ack);
+                e.Application.UnRegisterSubscribe(e.Message, e.Session);
             })
             .OnMessageReceive<PUBLISH>(e =>
             {
@@ -47,7 +50,7 @@ namespace BeetleX.MQTT.Server
                 PUBACK ack = new PUBACK();
                 ack.Identifier = e.Message.Identifier;
                 e.Return(ack);
-
+                e.Application.Publish(e.Message);
             })
             .OnMessageReceive<PINGREQ>(e =>
             {
@@ -61,26 +64,6 @@ namespace BeetleX.MQTT.Server
             .Run();
             Console.Read();
         }
-
-        public void Init(IServer server)
-        {
-            server.GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, null, "application data init");
-        }
     }
 
-    public class MQTTUser : ISessionToken
-    {
-        public string ID { get; set; }
-
-        public string UserName { get; set; }
-        public void Dispose()
-        {
-
-        }
-
-        public void Init(IServer server, ISession session)
-        {
-            server.GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, session, "session data init");
-        }
-    }
 }
