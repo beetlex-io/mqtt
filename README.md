@@ -1,5 +1,5 @@
 ## BeetleX MQTT Server
-    support tcp websocket and tls.
+support tcp websocket and tls.
 ### TCP
 ``` csharp
     class Program
