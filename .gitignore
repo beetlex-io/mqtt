@@ -3,3 +3,6 @@ BeetleX.MQTT/BeetleX.MQTT/obj/
 BeetleX.MQTT/BeetleX.MQTT.Server/bin/
 BeetleX.MQTT/BeetleX.MQTT.Server/obj/
 BeetleX.MQTT/BeetleX.MQTT/bin/
+BeetleX.MQTT/BeetleX.MQTT/Properties/
+BeetleX.MQTT/BeetleX.MQTT.WSServer/bin/
+BeetleX.MQTT/BeetleX.MQTT.WSServer/obj/

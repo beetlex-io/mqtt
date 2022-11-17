@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT", "BeetleX.MQT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT.Server", "BeetleX.MQTT.Server\BeetleX.MQTT.Server.csproj", "{B005E6AF-CFC1-4A6B-9D6A-91CB330A89D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeetleX.MQTT.WSServer", "BeetleX.MQTT.WSServer\BeetleX.MQTT.WSServer.csproj", "{2D55C297-B5D5-4E1B-93F7-E885FB74BD99}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B005E6AF-CFC1-4A6B-9D6A-91CB330A89D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B005E6AF-CFC1-4A6B-9D6A-91CB330A89D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B005E6AF-CFC1-4A6B-9D6A-91CB330A89D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D55C297-B5D5-4E1B-93F7-E885FB74BD99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D55C297-B5D5-4E1B-93F7-E885FB74BD99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D55C297-B5D5-4E1B-93F7-E885FB74BD99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D55C297-B5D5-4E1B-93F7-E885FB74BD99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
