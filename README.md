@@ -1,5 +1,5 @@
 ## BeetleX MQTT Server
-support tcp websocket and tls.
+High performance .NET library for MQTT based communication. Support tcp websocket and tls.
 ### TCP
 ``` csharp
     class Program
