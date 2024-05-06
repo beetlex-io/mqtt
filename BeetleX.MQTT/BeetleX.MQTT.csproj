@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.9.1</Version>
+    <Authors>henryfan</Authors>
+    <Company>beetlex-io.com</Company>
+    <Copyright>Copyright © beetlex-io.com 2019-2022 email: admin@beetlex-io.com or henryfan@msn.com</Copyright>
+    <PackageIcon>beetlex120.png</PackageIcon>
+    <PackageIconUrl />
+    <Description>beetlex mqtt protocol implement</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BeetleX" Version="1.8.24.435" />
+    <PackageReference Include="System.Text.Json" Version="7.0.0" />
+  </ItemGroup>
+
+</Project>

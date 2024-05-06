@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>登录</title>
+    <link href="/css/beetlex-v1.css" rel="stylesheet" />
+    <script src="/js/beetlex-v1.js"></script>
+    <meta name="viewport" content="user-scalable=no">
+</head>
+<body>
+    <div id="app">
+        <webfamily-login page="index.html" ref="loginpanel"></webfamily-login>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+
+            },
+            mounted() {
+            }
+
+        });
+        beetlex.error = function (msg) {
+            app.$errorMsg(msg);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>第三方平台帐号绑定</title>
+    <link href="/css/beetlex-v1.css" rel="stylesheet" />
+    <script src="/js/beetlex-v1.js"></script>
+    <meta name="viewport" content="user-scalable=no">
+    <style>
+        .bind-account-panel {
+            width: 550px;
+            margin: auto;
+            position: absolute;
+            right: 100px;
+            top: 30vh;
+        }
+
+        #app {
+            position: fixed;
+            max-width: 1440px;
+            margin: auto;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            background-image: url( /images/login-background.png);
+            background-size: auto 100%;
+            background-repeat: no-repeat;
+        }
+
+        @media screen and (max-width:1000px) {
+            .bind-account-panel {
+                width: 80%;
+                margin: auto;
+                top: 20vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+
+        <el-card v-if="showPanel==true" class="box-card bind-account-panel" style="background-color: #ffffffde;">
+            <div class="login-header">
+                <span>第三方平台帐号绑定</span>
+
+            </div>
+            <br />
+            <div style="text-align:center;">
+                <img :src="loginImg" />
+
+                <br />
+                ({{lognName}})
+            </div>
+            <br />
+            <div style="margin:auto;">
+                <p v-if="!record.openid" style="text-align:center;">
+                    <i class="el-icon-loading"></i>帐号验证中...
+                    <br />
+                    <br />
+                    <el-button size="mini" style="padding-left:10px; padding-right:10px;" @click="goHome">返回首页</el-button>
+                    <el-button size="mini" v-if="error" style="padding-left:10px; padding-right:10px;" @click="onReload">重试</el-button>
+                </p>
+                <el-form size="small" :model="record" label-width="150px" ref="dataform" v-if="record.openid">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="用户标识" prop="openid" :rules="openid_rules"><el-input disabled size="mini" v-model="record.openid"></el-input></el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="用户名" prop="name" :rules="name_rules"><el-input size="mini" v-model="record.name"></el-input></el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="密码" prop="password" :rules="password_rules"><el-input size="mini" v-model="record.password" show-password></el-input></el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col span="24" style="text-align:center">
+                            <el-button size="small" style="padding-left:10px; padding-right:10px;" @click="goHome">返回首页</el-button>
+                            <!--<el-button size="small" style="padding-left:10px; padding-right:10px;" @click="onRegister">注册新帐号</el-button>-->
+                            <el-button size="small" style="padding-left:10px; padding-right:10px;" @click="submitForm">绑定帐号</el-button>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+        </el-card>
+
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                openid_rules: [{ required: true, message: '必填!', trigger: 'blur' },],
+                name_rules: [{ required: true, message: '必填!', trigger: 'blur' },],
+                password_rules: [{ required: true, message: '必填!', trigger: 'blur' },],
+                record: {
+                    openid: null,
+                    name: null,
+                    password: null,
+                    type: _url.queryString["type"]
+                },
+                error: false,
+                showPanel: false,
+                lognName: '',
+                loginImg: '',
+            },
+            methods: {
+                onReload() {
+                    window.location.reload();
+                },
+                submitForm() {
+                    this.$refs['dataform'].validate((valid) => {
+                        if (valid) {
+                            this.$get('/website/OtherPlatformBind', this.record).then(r => {
+                                if (r.Token) {
+                                    beetlex.setToken(r.Token);
+                                    window.location.href = "index.html"
+                                    return;
+                                }
+                                if (r.Error) {
+                                    this.$errorMsg(r.Error);
+                                }
+                            });
+                        }
+                    });
+                },
+                onRegister() {
+                    window.location = 'register.html?type=' + _url.queryString["type"] + "$openid=" + this.openid;
+                },
+                goHome() {
+                    window.location = 'index.html';
+                },
+                onGetLoginName() {
+                    var type = _url.queryString["type"].toLowerCase();
+                    switch (type) {
+                        case "WeiXin".toLowerCase():
+                        case "ComWeiXin".toLowerCase():
+                            return "微信";
+                        case "QQ".toLowerCase():
+                            return "QQ";
+                        case "Github".toLowerCase():
+                            return "Github";
+                        case "Microsoft".toLowerCase():
+                            return "Microsoft";
+                        case "Alpay".toLowerCase():
+                            return "支付宝";
+                        case "Weibo".toLowerCase():
+                            return "微博";
+                        case "DD".toLowerCase():
+                            return "钉钉";
+                        case "BaiDu".toLowerCase():
+                            return "百度";
+                    }
+                },
+                onGetLoginImg() {
+                    var type = _url.queryString["type"].toLowerCase();
+                    switch (type) {
+                        case "WeiXin".toLowerCase():
+                        case "ComWeiXin".toLowerCase():
+                            return "images/wechat.png";
+                        case "QQ".toLowerCase():
+                            return "images/qq.png";
+                        case "Github".toLowerCase():
+                            return "images/github.png";
+                        case "Microsoft".toLowerCase():
+                            return "images/microsoft.png";
+                        case "Alpay".toLowerCase():
+                            return "images/alipay1.png";
+                        case "Weibo".toLowerCase():
+                            return "images/weibo.png";
+                        case "DD".toLowerCase():
+                            return "images/dd.png";
+                        case "BaiDu".toLowerCase():
+                            return "images/baidu.png";
+                    }
+                },
+                onGetLoginUrl() {
+                    var type = _url.queryString["type"].toLowerCase();
+                    switch (type) {
+
+                        case "OpenWeiXin".toLowerCase():
+                            return "/website/OpenWeiXinLogin"
+                        case "ComWeiXin".toLowerCase():
+                            return "/website/ComWeiXinLogin"
+                        case "WeiXin".toLowerCase():
+                            return "/website/WeiXinLogin";
+                        case "QQ".toLowerCase():
+                            return "/website/QQLogin";
+                        case "Github".toLowerCase():
+                            return "/website/GithubLogin";
+                        case "Microsoft".toLowerCase():
+                            return "/website/MicrosoftLogin";
+                        case "Alpay".toLowerCase():
+                            return "/website/AlpayLogin";
+                        case "Weibo".toLowerCase():
+                            return "/website/WeiboLogin";
+                        case "DD".toLowerCase():
+                            return "/website/DDLogin";
+                        case "BaiDu".toLowerCase():
+                            return "/website/BaiDuLogin";
+                    }
+                },
+                onLogin() {
+                    var type = sessionStorage.getItem("logintype");
+                    if (type != null) {
+                        _url.queryString["type"] = type;
+                        sessionStorage.removeItem('logintype');
+                    }
+                    var code = _url.queryString["code"];
+                    if (_url.queryString["type"].toLowerCase() == 'microsoft')
+                        code = sessionStorage.getItem("mscode");
+                    if (!code) {
+                        this.$errorMsg('平台验证信息不存在!');
+                        return;
+                    }
+                    var url = this.onGetLoginUrl();
+                    if (!url) {
+                        this.$errorMsg('type参数不正解，值必须为：WeiXin,ComWeiXin,OpenWeiXin,QQ,Github,Microsoft,Alpay,Weibo,DD,BaiDu!');
+                        return;
+                    }
+                    this.$get(url, { code: code }).then(r => {
+                        if (r.Error) {
+                            this.$errorMsg(r.Error);
+                            return;
+                        }
+
+                        if (r.Token) {
+                            beetlex.setToken(r.Token);
+                            window.location.href = "index.html"
+                            return;
+                        }
+                        else {
+                            this.record.openid = r.OpenID;
+                        }
+                    });
+
+                }
+            },
+            mounted() {
+                setTimeout(() => {
+                    this.lognName = this.onGetLoginName();
+                    this.loginImg = this.onGetLoginImg();
+                    this.showPanel = true;
+                    this.onLogin();
+                }, 300);
+                beetlex.error = (msg) => {
+                    this.$errorMsg(msg);
+                    this.error = true;
+                };
+            }
+
+        });;
+    </script>
+</body>
+
+</html>

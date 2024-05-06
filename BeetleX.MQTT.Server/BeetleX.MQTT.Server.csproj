@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>henryfan</Authors>
+    <Company>beetlex-io.com</Company>
+    <Description>beetlex mqtt server</Description>
+    <PackageIcon>beetlex120.png</PackageIcon>
+    <PackageIconUrl />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="views\css\echarts.js" />
+    <None Remove="views\css\website.css" />
+    <None Remove="views\vue\mqtt-header.vue" />
+    <None Remove="views\vue\mqtt-home.vue" />
+    <None Remove="views\vue\mqtt-onlines.vue" />
+    <None Remove="views\vue\mqtt-setting.vue" />
+    <None Remove="views\vue\mqtt-user-modify.vue" />
+    <None Remove="views\vue\mqtt-users.vue" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="views\css\website.css" />
+    <EmbeddedResource Include="views\js\echarts.js" />
+    <EmbeddedResource Include="views\vue\mqtt-header.vue" />
+    <EmbeddedResource Include="views\vue\mqtt-home.vue" />
+    <EmbeddedResource Include="views\vue\mqtt-onlines.vue" />
+    <EmbeddedResource Include="views\vue\mqtt-setting.vue" />
+    <EmbeddedResource Include="views\vue\mqtt-user-modify.vue" />
+    <EmbeddedResource Include="views\vue\mqtt-users.vue" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BeetleX" Version="1.8.24.435" />
+    <PackageReference Include="BeetleX.FastHttpApi" Version="2.2.24.425" />
+    <PackageReference Include="BeetleX.FastHttpApi.Hosting" Version="1.5.24.425" />
+    <PackageReference Include="BeetleX.Http.Clients" Version="2.2.24.425" />
+    <PackageReference Include="BeetleX.WebFamily" Version="2.9.24.428" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.32" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BeetleX.MQTT\BeetleX.MQTT.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="MQTTDB.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

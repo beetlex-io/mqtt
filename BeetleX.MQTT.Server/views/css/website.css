@@ -1,0 +1,17 @@
+﻿.menu-panel-header {
+    height: 40px;
+    width: 100%;
+    position: relative;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #fff;
+    background-color: #409eff;
+}
+.web-title {
+    color: #ffffff;
+}
+.menu_full .menu-resize-btn a {
+    display: block;
+    height: 32px;
+    color: #ffffff;
+}
