@@ -1,25 +1,24 @@
 ﻿using BeetleX.FastHttpApi;
-using BeetleX.MQTT.Messages;
+using BeetleX.MQTT.Protocols;
 using BeetleX.MQTT.Server.Storages;
 using BeetleX.WebFamily;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BeetleX.MQTT.Server
 {
-    public class MQTTApplication : IApplication
+    public abstract class MQTTApplication : IApplication
     {
 
 
         public MQTTApplication() { }
 
-        public MQTTApplication(string id) { }
-
         public string APPID { get; set; }
+
+        public abstract string Name { get; }
 
         public System.Collections.Concurrent.ConcurrentDictionary<string, MQTTUser> Clients { get; private set; }
         = new System.Collections.Concurrent.ConcurrentDictionary<string, MQTTUser>(StringComparer.OrdinalIgnoreCase);
@@ -44,7 +43,6 @@ namespace BeetleX.MQTT.Server
         {
             System.Threading.Interlocked.Add(ref mReceiveQuantity, value);
         }
-
 
         public object ListOnlines(int page, int size)
         {
@@ -72,15 +70,14 @@ namespace BeetleX.MQTT.Server
         }
 
 
-
         public void SetUser(MQTTUser user)
         {
             Clients[user.ID] = user;
         }
 
-        public virtual void RegisterSubscribe(SUBSCRIBE msg, MQTTUser user)
+        public virtual void RegisterSubscribe(List<Subscription> subscription, MQTTUser user)
         {
-            mSubscriptionMapper.Register(msg.Subscriptions, user);
+            mSubscriptionMapper.Register(subscription, user);
         }
 
 
@@ -92,17 +89,18 @@ namespace BeetleX.MQTT.Server
 
         public Func<string, MQTTUser> FindUser { get; set; }
 
-        public virtual void UnRegisterSubscribe(UNSUBSCRIBE msg, MQTTUser user)
+        public virtual void UnRegisterSubscribe(List<string> subscription, MQTTUser user)
         {
 
-            mSubscriptionMapper.Remove(msg.Subscription, user);
+            mSubscriptionMapper.Remove(subscription, user);
         }
 
-        public bool Publish(PUBLISH msg)
+        public bool Publish(IPublish msg)
         {
             mSubscriptionMapper.Publish(msg, this);
             return true;
         }
+
 
         public HttpApiServer Http { get; internal set; }
 
@@ -181,7 +179,7 @@ namespace BeetleX.MQTT.Server
             LoadOptions();
         }
 
-        protected virtual void Reply(MQTTMessage msg, HttpRequest websocket, ISession tcp)
+        public virtual void Reply(MQTTMessage msg, HttpRequest websocket, ISession tcp)
         {
             if (websocket != null)
             {
@@ -194,177 +192,7 @@ namespace BeetleX.MQTT.Server
             }
         }
 
-        public virtual bool OnContent(string clientid, CONNECT e, HttpRequest websocket, ISession tcp)
-        {
-            bool isNode = false;
-            CONNACK ack = new CONNACK();
-            string category = "";
-            if (string.IsNullOrEmpty(e.UserName))
-            {
-                ack.ReturnCode = ReturnCode.NoAccess;
-                Reply(ack, websocket, tcp);
-                GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, websocket != null ? websocket.Session : tcp, $"{clientid} user notfound");
-                return false;
-            }
-            if (SessionVerify)
-            {
-                using (MQTTDB context = new MQTTDB())
-                {
-                    var item = context.User.Find(e.UserName);
-                    if (item == null || e.Password != item.PWD || !item.Enabled)
-                    {
-
-                        ack.ReturnCode = ReturnCode.UserInfoError;
-                        Reply(ack, websocket, tcp);
-                        GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, websocket != null ? websocket.Session : tcp, $"{clientid} invalid username or password");
-                        return false;
-                    }
-                    category = item.Category;
-                    isNode = item.IsNodeClient;
-                }
-            }
-            var user = GetUser(e.ClientID);
-
-            if (user != null)
-            {
-                user.WebRequest?.Session?.Dispose();
-                user.NetSession?.Dispose();
-            }
-            else
-            {
-                user = new MQTTUser();
-                user.ID = e.ClientID;
-                SetUser(user);
-            }
-            user.Disconnected = false;
-            user.Category = category;
-            ack.ReturnCode = ReturnCode.Connected;
-            Reply(ack, websocket, tcp);
-            if (websocket == null)
-            {
-                user.RemoteIP = tcp.RemoteEndPoint.ToString();
-                tcp.Name = e.ClientID;
-                if (isNode)
-                    tcp["node"] = true;
-            }
-            else
-            {
-                user.RemoteIP = websocket.RemoteEndPoint.ToString();
-                websocket.Session.Name = e.ClientID;
-                if (isNode)
-                    tcp["node"] = true;
-            }
-            user.NodeClient = isNode;
-            user.WebRequest?.Session?.Dispose();
-            user.NetSession?.Dispose();
-            user.WebRequest = websocket;
-            user.NetSession = tcp;
-            GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, websocket != null ? websocket.Session : tcp, $"{clientid} connected@{(websocket != null ? "WS" : "TCP")}");
-            return true;
-        }
-
-        public virtual bool OnPublish(MQTTUser client, PUBLISH e)
-        {
-            GetLoger(EventArgs.LogType.Debug)?
-                .Log(EventArgs.LogType.Debug, client.GetNetSession(), $"{client.ID} publish {e.Topic}@ {e.Identifier}");
-            GetLoger(EventArgs.LogType.Debug)?
-                .Log(EventArgs.LogType.Trace, client.GetNetSession(), $"{client.ID} publish {e.Topic}@ {e.Identifier} data:{BitConverter.ToString(e.PayLoadData.Array, e.PayLoadData.Offset, e.PayLoadData.Count)}");
-            this.AddNumberOfPush();
-            client.AddNumberOfPush();
-            AddReceiveQuantity();
-            if (e.QoS == QoSType.LeastOnce)
-            {
-                PUBACK ack = new PUBACK();
-                ack.Identifier = e.Identifier;
-                client.Send(ack);
-            }
-            return Publish(e);
-        }
-
-        public virtual void OnSubscribe(MQTTUser client, SUBSCRIBE e)
-        {
-            GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, client.GetNetSession(), $"{client.ID} subscribe {e}");
-
-            SUBACK ack = new SUBACK();
-            ack.Identifier = e.Identifier;
-            ack.Status = QoSType.MostOnce;
-            client.Send(ack);
-            RegisterSubscribe(e, client);
-        }
-
-        public virtual void OnConnAck(MQTTUser client, CONNACK e)
-        {
-
-        }
-
-        public virtual void OnDisconnect(MQTTUser client, DISCONNECT e)
-        {
-            GetLoger(EventArgs.LogType.Info)?
-              .Log(EventArgs.LogType.Info, client.GetNetSession(), $"{client.ID} disconnect");
-            Disconnect(client);
-
-        }
-
-        public virtual void OnPingREQ(MQTTUser client, PINGREQ e)
-        {
-            GetLoger(EventArgs.LogType.Info)?
-               .Log(EventArgs.LogType.Info, client.GetNetSession(), $"{client.ID} ping");
-            PINGRESP resp = new PINGRESP();
-            client.Send(resp);
-        }
-
-        public virtual void OnPingResp(MQTTUser client, PINGRESP e)
-        {
-
-        }
-
-        public virtual void OnPubAck(MQTTUser client, PUBACK e)
-        {
-
-
-        }
-
-        public virtual void OnPubComp(MQTTUser client, PUBCOMP e)
-        {
-
-        }
-
-
-
-
-        public virtual void OnPubRec(MQTTUser client, PUBREC e)
-        {
-
-        }
-
-
-        public virtual void OnPubRel(MQTTUser client, PUBREL e)
-        {
-
-        }
-
-
-        public virtual void OnSubAck(MQTTUser client, SUBACK e)
-        {
-
-        }
-
-
-        public virtual void OnUnSubAck(MQTTUser client, UNSUBACK e)
-        {
-
-
-        }
-
-        public virtual void OnUnSubscribe(MQTTUser client, UNSUBSCRIBE e)
-        {
-            GetLoger(EventArgs.LogType.Info)?.Log(EventArgs.LogType.Info, client.GetNetSession(), $"{client.ID} unsubscribe {e}");
-            UNSUBACK ack = new UNSUBACK();
-            ack.Identifier = e.Identifier;
-            client.Send(ack);
-            UnRegisterSubscribe(e, client);
-
-        }
+        public abstract void Receive(EventMessageReceiveArgs<NetApplication, NetUser, object> e);
 
         public async void Disconnect(ISession session, int delay = 3000)
         {

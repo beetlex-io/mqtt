@@ -1,4 +1,4 @@
-﻿using BeetleX.MQTT.Messages;
+﻿using BeetleX.MQTT.Protocols;
 using BeetleX.Redis.Commands;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Logging;
@@ -88,7 +88,7 @@ namespace BeetleX.MQTT.Server
             }
         }
 
-        public void Publish(Messages.PUBLISH data, MQTTApplication app)
+        public void Publish(IPublish data, MQTTApplication app)
         {
             var match = SearchSubscriber(data.Topic);
             if (match != null)
@@ -105,7 +105,7 @@ namespace BeetleX.MQTT.Server
                             topic.AddDistributionQuantity();
                             item.AddDistributionQuantity();
                             item.Info.AddDistributionQuantity();
-                            item.Info.Send(data);
+                            item.Info.Send((MQTTMessage)data);
                         }
                     }
                 }

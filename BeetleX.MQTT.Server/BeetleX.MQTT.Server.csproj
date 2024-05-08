@@ -12,6 +12,7 @@
   <ItemGroup>
     <None Remove="views\css\echarts.js" />
     <None Remove="views\css\website.css" />
+    <None Remove="views\vue\mqtt-about.vue" />
     <None Remove="views\vue\mqtt-header.vue" />
     <None Remove="views\vue\mqtt-home.vue" />
     <None Remove="views\vue\mqtt-onlines.vue" />
@@ -23,6 +24,7 @@
   <ItemGroup>
     <EmbeddedResource Include="views\css\website.css" />
     <EmbeddedResource Include="views\js\echarts.js" />
+    <EmbeddedResource Include="views\vue\mqtt-about.vue" />
     <EmbeddedResource Include="views\vue\mqtt-header.vue" />
     <EmbeddedResource Include="views\vue\mqtt-home.vue" />
     <EmbeddedResource Include="views\vue\mqtt-onlines.vue" />
@@ -41,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BeetleX.MQTT\BeetleX.MQTT.csproj" />
+    <ProjectReference Include="..\BeetleX.MQTT.Protocols\BeetleX.MQTT.Protocols.csproj" />
   </ItemGroup>
 
   <ItemGroup>

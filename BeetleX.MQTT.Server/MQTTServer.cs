@@ -1,5 +1,8 @@
 ﻿using BeetleX.FastHttpApi;
-using BeetleX.MQTT.Messages;
+using BeetleX.MQTT.Protocols;
+using BeetleX.MQTT.Protocols.V3;
+using BeetleX.MQTT.Protocols.V5;
+using BeetleX.WebFamily;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -10,24 +13,34 @@ using System.Threading.Tasks;
 
 namespace BeetleX.MQTT.Server
 {
-    public class MQTTServer<APPLICATION, MQTTPARSE> : WebFamily.WebHost
-        where APPLICATION : MQTTApplication, new()
-        where MQTTPARSE : MQTTParse, new()
+    public class MQTTServer : WebHost
     {
-        public MQTTServer()
+        public MQTTServer(ProtocolType type = ProtocolType.V3)
         {
-            Application.APPID = "1";
+            mProtocolType = type;
+            if (mProtocolType == ProtocolType.V3)
+            {
+                Application = new MQTTApplicationV3();
+            }
+            else
+            {
+
+                Application = new MQTTApplicationV5();
+            }
+
         }
+
+        private ProtocolType mProtocolType = ProtocolType.V3;
 
         private TCPOptions mTCPOptions = new TCPOptions();
 
         public TCPOptions TCPOptions => mTCPOptions;
 
-        public static APPLICATION Application { get; private set; } = new APPLICATION();
+        public static MQTTApplication Application { get; private set; }
 
 
 
-        public MQTTServer<APPLICATION, MQTTPARSE> EnabledTCP(Action<BeetleX.ServerOptions> setting)
+        public MQTTServer MQTTListen(Action<BeetleX.ServerOptions> setting)
         {
             mTCPOptions.OptionsHandler = setting;
             return this;
@@ -36,114 +49,73 @@ namespace BeetleX.MQTT.Server
         {
             base.OnHttpSetting(services, option);
             mTCPOptions.LogType = option.LogLevel;
-            option.WebSocketFrameSerializer = new MQTTFormater<MQTTPARSE>();
-
 
         }
         protected override void OnConfigureServices(HostBuilderContext context, IServiceCollection service)
         {
             base.OnConfigureServices(context, service);
             service.AddSingleton(mTCPOptions);
-            service.AddSingleton(Application);
-            service.AddHostedService<TCPHost<APPLICATION, MQTTPARSE>>();
+            service.AddSingleton<MQTTApplication>(Application);
+            if (mProtocolType == ProtocolType.V3)
+            {
+                service.AddHostedService<TCPHost<MQTTApplicationV3, MQTTPacketV3>>();
+            }
+            else
+            {
+                service.AddHostedService<TCPHost<MQTTApplicationV5, MQTTPacketV5>>();
+            }
 
         }
 
+        private void OnWebSetting(HttpApiServer server)
+        {
+            WebHost.Title = "BEETLEX-MQTT";
+            WebHost.AppName = "BEETLEX-MQTT";
+            WebHost.HeaderModel = "mqtt-header";
+            WebHost.Login = true;
+            WebHost.HomeModel = "mqtt-home";
+            WebHost.HomeName = "主页";
+            WebHost.GetMenus = (user, role, context) =>
+            {
+                List<Menu> result = new List<Menu>();
+                Menu item = new Menu();
+                item.ID = "home";
+                item.Model = "mqtt-home";
+                item.Name = "主页";
+                item.Icon = "fa-solid fa-house";
+                result.Add(item);
+
+
+
+                item = new Menu();
+                item.ID = "mqtt-onlines";
+                item.Model = "mqtt-onlines";
+                item.Icon = "fa-solid fa-hard-drive";
+                item.Name = "在线设备";
+                result.Add(item);
+
+                item = new Menu();
+                item.ID = "mqtt-users";
+                item.Model = "mqtt-users";
+                item.Icon = "fa-solid fa-user";
+                item.Name = "帐户管理";
+                result.Add(item);
+
+                return Task.FromResult(result);
+            };
+            WebHost.LoginHandler = Application.Login;
+        }
         protected override void OnInitServer(HttpApiServer server)
         {
             base.OnInitServer(server);
             Application.Http = server;
-
+            Protocols.V5.Headers.HeaderFactory.Init();
+            OnWebSetting(server);
         }
         protected override void OnCompleted(HttpApiServer server)
         {
             base.OnCompleted(server);
             Application.Init(server.Server);
-            server.WebSocketReceive = (o, e) =>
-            {
-                Console.WriteLine(e.Frame.FIN);
-                if (e.Frame.Body != null)
-                {
-                    var items = (List<MQTTMessage>)e.Frame.Body;
-                    MQTTUser mqttuser = null;
-                    foreach (var item in items)
-                    {
-                        string userid = null;
-                        if (item is CONNECT conn)
-                        {
-                            userid = conn.ClientID;
-                        }
-                        else
-                        {
-                            userid = e.Request.Session.Token<NetUser>().ClientID;
-                            mqttuser = Application.GetUser(userid);
-                            if (e.Sesson.Authentication != AuthenticationType.Security)
-                            {
-                                Application.Disconnect(mqttuser);
-                                Application.GetLoger(EventArgs.LogType.Info).Log(EventArgs.LogType.Info, e.Sesson, "No permission to operate!");
-                                return;
-                            }
-                            mqttuser.UpdataActiveTime();
-                        }
-                        switch (item.Type)
-                        {
-                            case MQTTMessageType.CONNACK:
-                                Application.OnConnAck(mqttuser, (CONNACK)item);
-                                break;
-                            case MQTTMessageType.CONNECT:
-                                if (Application.OnContent(userid, (CONNECT)item, e.Request, null))
-                                {
-                                    e.Sesson.Token<NetUser>().ClientID = userid;
-                                    e.Sesson.Name = userid;
-                                    e.Sesson.Authentication = AuthenticationType.Security;
-                                }
-                                else
-                                {
-                                    Application.GetLoger(EventArgs.LogType.Warring).Log(EventArgs.LogType.Info, e.Sesson, "Login verification error!");
-                                    Application.Disconnect(e.Sesson);
-                                    return;
-                                }
-                                break;
-                            case MQTTMessageType.DISCONNECT:
-                                Application.OnDisconnect(mqttuser, (DISCONNECT)item);
-                                break;
-                            case MQTTMessageType.PINGREQ:
-                                Application.OnPingREQ(mqttuser, (PINGREQ)item);
-                                break;
-                            case MQTTMessageType.PINGRESP:
-                                Application.OnPingResp(mqttuser, (PINGRESP)item);
-                                break;
-                            case MQTTMessageType.PUBACK:
-                                Application.OnPubAck(mqttuser, (PUBACK)item);
-                                break;
-                            case MQTTMessageType.PUBCOMP:
-                                Application.OnPubComp(mqttuser, (PUBCOMP)item);
-                                break;
-                            case MQTTMessageType.PUBLISH:
-                                Application.OnPublish(mqttuser, (PUBLISH)item);
-                                break;
-                            case MQTTMessageType.PUBREC:
-                                Application.OnPubRec(mqttuser, (PUBREC)item);
-                                break;
-                            case MQTTMessageType.PUBREL:
-                                Application.OnPubRel(mqttuser, (PUBREL)item);
-                                break;
-                            case MQTTMessageType.SUBACK:
-                                Application.OnSubAck(mqttuser, (SUBACK)item);
-                                break;
-                            case MQTTMessageType.SUBSCRIBE:
-                                Application.OnSubscribe(mqttuser, (SUBSCRIBE)item);
-                                break;
-                            case MQTTMessageType.UNSUBACK:
-                                Application.OnUnSubAck(mqttuser, (UNSUBACK)item);
-                                break;
-                            case MQTTMessageType.UNSUBSCRIBE:
-                                Application.OnUnSubscribe(mqttuser, (UNSUBSCRIBE)item);
-                                break;
-                        }
-                    }
-                }
-            };
             server.WebSocketConnect += (o, e) =>
             {
                 e.Request.Session.Token<NetUser>();
@@ -153,4 +125,7 @@ namespace BeetleX.MQTT.Server
         }
 
     }
+
+
+
 }

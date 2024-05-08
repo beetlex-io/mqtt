@@ -33,6 +33,11 @@ namespace BeetleX.MQTT.Server
 
         }
 
+        public string GetApplicationName()
+        {
+            return mApplication.Name +" Gateway";
+        }
+
         public object ListUsers(int page, int size, EFCoreDB<MQTTDB> db)
         {
             Select<User> select = new Select<User>();

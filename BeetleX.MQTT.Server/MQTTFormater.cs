@@ -1,6 +1,7 @@
 ﻿using BeetleX.Buffers;
 using BeetleX.FastHttpApi;
 using BeetleX.FastHttpApi.WebSockets;
+using BeetleX.MQTT.Protocols;
 using System;
 using System.Collections.Generic;
 using System.IO;

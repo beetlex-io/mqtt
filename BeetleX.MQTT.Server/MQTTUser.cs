@@ -1,5 +1,5 @@
 ﻿using BeetleX.FastHttpApi;
-using BeetleX.MQTT.Messages;
+using BeetleX.MQTT.Protocols;
 using System;
 using System.Collections.Generic;
 using System.Linq;

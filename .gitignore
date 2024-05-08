@@ -13,3 +13,4 @@ BeetleX.MQTT.ClientApp/bin/
 BeetleX.MQTT.ClientApp/obj/
 BeetleX.MQTT.SubscriberClient/bin/
 BeetleX.MQTT.SubscriberClient/obj/
+BeetleX.MQTT.Protocols/obj/
