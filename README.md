@@ -1,16 +1,48 @@
 # MQTT
 
 #### 介绍
-基于BeetleX组件扩展的高性能MQTT通讯网关(暂只实现了3.1.X的通讯规范)，可以轻松应对数十万的消费订阅转发。
+基于BeetleX组件扩展的高性能MQTT通讯网关，可以轻松应对数十万的消费订阅转发.组件实现了3.x和5.0版本的协议。
+#### 运行服务
+``` csharp
+    class Program
+    {
+        private static MQTTServer mServer;
+        static void Main(string[] args)
+        {
 
-项目已经集了UI管理功能只需要运行BeetleX.MQTT.Server.ConsoleApp项目即可部署并管理服务网关。
-项目默认是.net8项目（根本需要可调整，基础库支持:netcoreapp3.1;net5.0;net6.0;基础协议组件则是netstandard2.0)
+            mServer = new MQTTServer(ProtocolType.V3);
+            mServer.RegisterComponent<BeetleX.MQTT.Server.Controller>();
+            mServer.MQTTListen(o =>
+            {
+                o.DefaultListen.Port = 8089;
+            })
+            .Setting(o =>
+            {
+                o.LogToConsole = true;
+                o.Port = 80;
+                o.LogLevel = EventArgs.LogType.Info;
+            })
+            .UseJWT()
+            .UseEFCore<Storages.MQTTDB>()
+            .UseElement(PageStyle.ElementDashboard)
+            .Initialize((http, vue, resoure) =>
+            {
+                resoure.AddAssemblies(typeof(BeetleX.MQTT.Server.MQTTUser).Assembly);
+                resoure.AddCss("website.css");
+                resoure.AddScript("echarts.js");
+                vue.Debug();
+            })
+           .Run();
 
-（由于项目仅个人兴趣时间编写，功能还比较简单）
+        }
+    }
+```
+### 主界面
+![image](https://github.com/beetlex-io/mqtt/assets/2564178/b962273c-0ea9-4651-b577-4a49fd3fe38c)
 
-1. 主界面
-![输入图片说明](https://foruda.gitee.com/images/1714554228660372514/fcd5ef9e_1522909.png "屏幕截图")
-2. 设备界面
-![输入图片说明](https://foruda.gitee.com/images/1714554288362186155/01d8b05f_1522909.png "屏幕截图")
-3. 用户界面
-![输入图片说明](https://foruda.gitee.com/images/1714554405958230020/15700652_1522909.png "屏幕截图")
+### 帐号界面
+![image](https://github.com/beetlex-io/mqtt/assets/2564178/96abc308-5a86-46bc-92da-085bb7278531)
+
+### 设备查看界面
+![image](https://github.com/beetlex-io/mqtt/assets/2564178/302aeccf-0d69-4a00-92a0-a0137b83b871)
+
