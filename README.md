@@ -37,6 +37,18 @@
         }
     }
 ```
+### 单独使用协议包
+BeetleX.MQTT.Protocols是MQTT的协议分析组件，它是基于Stream来处理MQTT协议，如果不想使用BeetleX配套网服务功能可以单独引用BeetleX.MQTT.Protocols来进行MQTT的协议分析.组件是支持V3.X和V5.0
+``` csharp
+//v5
+var mqttparse = new BeetleX.MQTT.Protocols.V5.MQTTParseV5();
+mqttparse.Read(stream, null);
+mqttparse.Write(msg, stream, null);
+            //v3.x
+var mqttparse = new BeetleX.MQTT.MQTTParseV3();
+mqttparse.Read(stream, null);
+mqttparse.Write(msg, stream, null);
+```
 ### 主界面
 ![image](https://github.com/beetlex-io/mqtt/assets/2564178/b962273c-0ea9-4651-b577-4a49fd3fe38c)
 
