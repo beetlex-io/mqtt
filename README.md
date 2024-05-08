@@ -44,7 +44,7 @@ BeetleX.MQTT.Protocols是MQTT的协议分析组件，它是基于Stream来处理
 var mqttparse = new BeetleX.MQTT.Protocols.V5.MQTTParseV5();
 mqttparse.Read(stream, null);
 mqttparse.Write(msg, stream, null);
-            //v3.x
+//v3.x
 var mqttparse = new BeetleX.MQTT.MQTTParseV3();
 mqttparse.Read(stream, null);
 mqttparse.Write(msg, stream, null);
