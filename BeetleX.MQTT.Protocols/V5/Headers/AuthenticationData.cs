@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.AuthenticationData)]
-    public class AuthenticationData : IHeaderExpend<byte[]>
+    public class AuthenticationData : IHeaderPropertyExpend<byte[]>
     {
         public byte[] Value { get; set; }
 

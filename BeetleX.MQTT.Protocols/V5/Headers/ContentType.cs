@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.ContentType)]
-    public class ContentType : IHeaderExpend<string>
+    public class ContentType : IHeaderPropertyExpend<string>
     {
         public string Value { get; set; }
 

@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.TopicAliasMaximum)]
-    public class TopicAliasMaximum : IHeaderExpend<ushort>
+    public class TopicAliasMaximum : IHeaderPropertyExpend<ushort>
     {
         public ushort Value { get; set; }
 

@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.TopicAlias)]
-    public class TopicAlias : IHeaderExpend<ushort>
+    public class TopicAlias : IHeaderPropertyExpend<ushort>
     {
         public ushort Value { get; set; }
 

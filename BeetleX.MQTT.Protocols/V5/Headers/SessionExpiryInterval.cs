@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.SessionExpiryInterval)]
-    public class SessionExpiryInterval : IHeaderExpend<int>
+    public class SessionExpiryInterval : IHeaderPropertyExpend<int>
     {
         public int Value { get; set; }
 

@@ -3,25 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT", "BeetleX.MQTT\BeetleX.MQTT.csproj", "{742E3962-9878-443D-BCD4-F7100FBA05C3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT.Server", "BeetleX.MQTT.Server\BeetleX.MQTT.Server.csproj", "{E6715E23-AF7F-485C-AA4E-8DBB5D0B597C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT.Server.ConsoleApp", "BeetleX.MQTT.Server.ConsoleApp\BeetleX.MQTT.Server.ConsoleApp.csproj", "{440C8D4F-0A9B-4750-95BC-6675A9540EF0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT.ClientApp", "BeetleX.MQTT.ClientApp\BeetleX.MQTT.ClientApp.csproj", "{09A636B7-E61B-4BDC-9A3F-FC28DB1C54BB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT.SubscriberClient", "BeetleX.MQTT.SubscriberClient\BeetleX.MQTT.SubscriberClient.csproj", "{3F1A43B0-4F14-4810-B0E7-18FBD8F02D84}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "V50", "V50", "{E147EEA2-0845-4404-BA86-2E199F44EF73}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT.V5", "V5\BeetleX.MQTT.V5\BeetleX.MQTT.V5.csproj", "{B3721E97-05DE-4778-8957-47BD3C39D3AA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT.Server", "V5\BeetleX.MQTT.Server\BeetleX.MQTT.Server.csproj", "{7EAAD2E9-9811-429B-84C3-8B09953D5AEF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT.Server.ConsoleApp", "V5\BeetleX.MQTT.Server.ConsoleApp\BeetleX.MQTT.Server.ConsoleApp.csproj", "{1AF10FD0-AFEF-42AC-ACE5-C22C3A94F0AE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeetleX.MQTT.Protocols", "BeetleX.MQTT.Protocols\BeetleX.MQTT.Protocols.csproj", "{5F78FA40-2B7D-459C-BEA7-7DEA24559353}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeetleX.MQTT.Protocols", "BeetleX.MQTT.Protocols\BeetleX.MQTT.Protocols.csproj", "{5F78FA40-2B7D-459C-BEA7-7DEA24559353}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{742E3962-9878-443D-BCD4-F7100FBA05C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{742E3962-9878-443D-BCD4-F7100FBA05C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{742E3962-9878-443D-BCD4-F7100FBA05C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{742E3962-9878-443D-BCD4-F7100FBA05C3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E6715E23-AF7F-485C-AA4E-8DBB5D0B597C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E6715E23-AF7F-485C-AA4E-8DBB5D0B597C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6715E23-AF7F-485C-AA4E-8DBB5D0B597C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,26 +23,6 @@ Global
 		{440C8D4F-0A9B-4750-95BC-6675A9540EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{440C8D4F-0A9B-4750-95BC-6675A9540EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{440C8D4F-0A9B-4750-95BC-6675A9540EF0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{09A636B7-E61B-4BDC-9A3F-FC28DB1C54BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09A636B7-E61B-4BDC-9A3F-FC28DB1C54BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09A636B7-E61B-4BDC-9A3F-FC28DB1C54BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09A636B7-E61B-4BDC-9A3F-FC28DB1C54BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3F1A43B0-4F14-4810-B0E7-18FBD8F02D84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F1A43B0-4F14-4810-B0E7-18FBD8F02D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3F1A43B0-4F14-4810-B0E7-18FBD8F02D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3F1A43B0-4F14-4810-B0E7-18FBD8F02D84}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3721E97-05DE-4778-8957-47BD3C39D3AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3721E97-05DE-4778-8957-47BD3C39D3AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3721E97-05DE-4778-8957-47BD3C39D3AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3721E97-05DE-4778-8957-47BD3C39D3AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7EAAD2E9-9811-429B-84C3-8B09953D5AEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7EAAD2E9-9811-429B-84C3-8B09953D5AEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7EAAD2E9-9811-429B-84C3-8B09953D5AEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7EAAD2E9-9811-429B-84C3-8B09953D5AEF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AF10FD0-AFEF-42AC-ACE5-C22C3A94F0AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AF10FD0-AFEF-42AC-ACE5-C22C3A94F0AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AF10FD0-AFEF-42AC-ACE5-C22C3A94F0AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AF10FD0-AFEF-42AC-ACE5-C22C3A94F0AE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5F78FA40-2B7D-459C-BEA7-7DEA24559353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5F78FA40-2B7D-459C-BEA7-7DEA24559353}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F78FA40-2B7D-459C-BEA7-7DEA24559353}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -68,11 +30,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{B3721E97-05DE-4778-8957-47BD3C39D3AA} = {E147EEA2-0845-4404-BA86-2E199F44EF73}
-		{7EAAD2E9-9811-429B-84C3-8B09953D5AEF} = {E147EEA2-0845-4404-BA86-2E199F44EF73}
-		{1AF10FD0-AFEF-42AC-ACE5-C22C3A94F0AE} = {E147EEA2-0845-4404-BA86-2E199F44EF73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E66074EB-E341-4D56-B129-A34FBEEABBE0}

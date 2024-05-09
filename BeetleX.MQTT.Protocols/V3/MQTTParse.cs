@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace BeetleX.MQTT
+namespace BeetleX.MQTT.Protocols.V3
 {
     public class MQTTParseV3 : MQTTParse
     {

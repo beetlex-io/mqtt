@@ -8,7 +8,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\BeetleX.MQTT.Server\BeetleX.MQTT.Server.csproj" />
-		<ProjectReference Include="..\BeetleX.MQTT\BeetleX.MQTT.csproj" />
+
 	</ItemGroup>
 
 </Project>

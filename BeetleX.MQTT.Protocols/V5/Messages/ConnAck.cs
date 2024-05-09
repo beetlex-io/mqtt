@@ -53,15 +53,15 @@ namespace BeetleX.MQTT.Protocols.V5.Messages
                 + MaximumQoS
                 + RetainAvailable
                 + AssignedClientIdentifier
-                + TopicAliasMaximum 
-                + ReasonString 
-                + WildcardSubscriptionAvailable 
-                + SubscriptionIdentifierAvailable 
-                + SharedSubscriptionAvailable 
-                + ServerKeepAlive 
-                + ResponseInformation 
-                + ServerReference 
-                + AuthenticationData 
+                + TopicAliasMaximum
+                + ReasonString
+                + WildcardSubscriptionAvailable
+                + SubscriptionIdentifierAvailable
+                + SharedSubscriptionAvailable
+                + ServerKeepAlive
+                + ResponseInformation
+                + ServerReference
+                + AuthenticationData
                 + UserProperties;
             ps.Write(parse, stream);
         }

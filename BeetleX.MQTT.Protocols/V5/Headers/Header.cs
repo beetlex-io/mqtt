@@ -13,7 +13,7 @@ namespace BeetleX.MQTT.Protocols.V5.Headers
         void Write(MQTTParse mqttParse, System.IO.Stream stream);
     }
 
-    public interface IHeaderExpend<T> : IHeaderProperty
+    public interface IHeaderPropertyExpend<T> : IHeaderProperty
     {
         T Value { get; set; }
 

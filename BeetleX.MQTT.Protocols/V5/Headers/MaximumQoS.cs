@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.MaximumQoS)]
-    public class MaximumQoS : IHeaderExpend<byte>
+    public class MaximumQoS : IHeaderPropertyExpend<byte>
     {
         public byte Value { get; set; }
 

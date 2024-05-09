@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.SubscriptionIdentifierAvailable)]
-    public class SubscriptionIdentifierAvailable : IHeaderExpend<byte>
+    public class SubscriptionIdentifierAvailable : IHeaderPropertyExpend<byte>
     {
         public byte Value { get; set; }
 

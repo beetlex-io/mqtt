@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.RetainAvailable)]
-    public class RetainAvailable : IHeaderExpend<byte>
+    public class RetainAvailable : IHeaderPropertyExpend<byte>
     {
         public byte Value { get; set; }
 

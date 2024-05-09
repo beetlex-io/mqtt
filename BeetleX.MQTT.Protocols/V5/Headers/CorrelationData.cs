@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.CorrelationData)]
-    public class CorrelationData : IHeaderExpend<byte[]>
+    public class CorrelationData : IHeaderPropertyExpend<byte[]>
     {
         public byte[] Value { get; set; }
 

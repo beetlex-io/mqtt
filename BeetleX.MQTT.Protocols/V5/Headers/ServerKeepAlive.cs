@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.ServerKeepAlive)]
-    public class ServerKeepAlive : IHeaderExpend<ushort>
+    public class ServerKeepAlive : IHeaderPropertyExpend<ushort>
     {
         public ushort Value { get; set; }
 

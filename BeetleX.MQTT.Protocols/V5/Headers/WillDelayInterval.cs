@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.WillDelayInterval)]
-    public class WillDelayInterval : IHeaderExpend<int>
+    public class WillDelayInterval : IHeaderPropertyExpend<int>
     {
         public int Value { get; set; }
 

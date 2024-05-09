@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.RequestProblemInformation)]
-    public class RequestProblemInformation : IHeaderExpend<byte>
+    public class RequestProblemInformation : IHeaderPropertyExpend<byte>
     {
         public byte Value { get; set; }
 

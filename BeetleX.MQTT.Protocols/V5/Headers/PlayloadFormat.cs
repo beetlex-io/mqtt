@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.PayloadFormatIndicator)]
-    public class PayloadFormatIndicator : IHeaderExpend<byte>
+    public class PayloadFormatIndicator : IHeaderPropertyExpend<byte>
     {
         public byte Value { get; set; }
 

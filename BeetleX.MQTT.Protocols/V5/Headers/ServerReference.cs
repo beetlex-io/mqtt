@@ -6,7 +6,7 @@ using System.Text;
 namespace BeetleX.MQTT.Protocols.V5.Headers
 {
     [Header(HeaderType.ServerReference)]
-    public class ServerReference : IHeaderExpend<string>
+    public class ServerReference : IHeaderPropertyExpend<string>
     {
         public string Value { get; set; }
 

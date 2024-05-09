@@ -160,7 +160,6 @@ namespace BeetleX.MQTT.Protocols
             return BitHelper.SwapInt16(result);
         }
 
-
         public virtual void WriteInt(System.IO.Stream stream, int value)
         {
             value = BitHelper.SwapInt32(value);

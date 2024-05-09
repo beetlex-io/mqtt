@@ -25,6 +25,27 @@ namespace BeetleX.MQTT.Protocols
 
         public byte Bit4 { get; set; }
 
+        internal void Read(MQTTParse parse, System.IO.Stream stream, ISession session)
+        {
+            OnRead(parse, stream, session);
+        }
+
+        protected virtual void OnRead(MQTTParse parse, Stream stream, ISession session)
+        {
+
+        }
+
+        internal void Write(MQTTParse parse, System.IO.Stream stream, ISession session)
+        {
+            OnWrite(parse, stream, session);
+        }
+
+        protected virtual void OnWrite(MQTTParse parse, Stream stream, ISession session)
+        {
+
+        }
+
+
         [ThreadStatic]
         private static PropertyStream mPropertiesStream;
 
@@ -58,25 +79,7 @@ namespace BeetleX.MQTT.Protocols
         }
 
 
-        internal void Read(MQTTParse parse, System.IO.Stream stream, ISession session)
-        {
-            OnRead(parse, stream, session);
-        }
-
-        protected virtual void OnRead(MQTTParse parse, Stream stream, ISession session)
-        {
-
-        }
-
-        internal void Write(MQTTParse parse, System.IO.Stream stream, ISession session)
-        {
-            OnWrite(parse, stream, session);
-        }
-
-        protected virtual void OnWrite(MQTTParse parse, Stream stream, ISession session)
-        {
-
-        }
+      
 
 
     }
