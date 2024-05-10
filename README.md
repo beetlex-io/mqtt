@@ -14,12 +14,12 @@
             mServer.RegisterComponent<BeetleX.MQTT.Server.Controller>();
             mServer.MQTTListen(o =>
             {
-                o.DefaultListen.Port = 8089;
+                o.DefaultListen.Port = 8089;//mqtt服务端口
             })
             .Setting(o =>
             {
                 o.LogToConsole = true;
-                o.Port = 80;
+                o.Port = 80;//web管理端口
                 o.LogLevel = EventArgs.LogType.Info;
             })
             .UseJWT()
@@ -37,7 +37,7 @@
         }
     }
 ```
-运行成功后可以通过浏览器访问http://localhost进入管理界面（如果电脑上已经有服务占用了80端口，则根据自己需要调整）。
+运行成功后可以通过浏览器访问 http://localhost 进入管理界面（如果电脑上已经有服务占用了80端口，则根据自己需要调整）。
 ### 单独使用协议包
 BeetleX.MQTT.Protocols是MQTT的协议分析组件，它是基于Stream来处理MQTT协议，如果不想使用BeetleX配套网服务功能可以单独引用BeetleX.MQTT.Protocols来进行MQTT的协议分析.组件是支持V3.X和V5.0
 ``` csharp
